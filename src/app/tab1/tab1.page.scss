@@ -1,0 +1,114 @@
+.home-content {
+  --background: #f5f6f7;
+}
+
+.container {
+  padding: 16px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.date {
+  color: #666;
+  margin-bottom: 16px;
+}
+
+/* CARD CICLO */
+.cycle-card {
+  background: linear-gradient(135deg, #f3d3da, #f7e3e7);
+  border-radius: 20px;
+}
+
+.cycle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cycle-header h1 {
+  font-size: 40px;
+  color: #e94b6a;
+  margin: 0;
+}
+
+.circle-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #e94b6a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-icon ion-icon {
+  font-size: 22px;
+  color: #e94b6a;
+}
+
+.cycle-phase {
+  margin-top: 16px;
+  padding: 12px;
+  background: #ffffffaa;
+  border-radius: 12px;
+}
+
+/* CARDS PEQUENOS */
+.info-cards {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.small-card {
+  flex: 1;
+  border-radius: 16px;
+}
+
+/* ÍCONES */
+.icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.icon ion-icon {
+  font-size: 18px;
+}
+
+.orange {
+  background: #ffe8c2;
+}
+
+.green {
+  background: #d7f5e0;
+}
+
+.purple {
+  background: #e2d9ff;
+}
+
+/* LISTA */
+.section-title {
+  margin-top: 20px;
+}
+
+.custom-item {
+  margin-top: 10px;
+  border-radius: 12px;
+  --background: #ffffff;
+}
+
+/* DICA */
+.tip-card {
+  background: #dbeeff;
+  border-radius: 16px;
+  margin-top: 16px;
+}
