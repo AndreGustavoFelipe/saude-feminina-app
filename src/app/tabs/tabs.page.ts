@@ -10,4 +10,7 @@ export class TabsPage {
 
   constructor() {}
 
+  onAdd() {
+    alert('Ação do botão +');
+  }
 }

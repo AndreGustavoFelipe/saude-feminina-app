@@ -1,1 +1,42 @@
+.custom-tabs {
+  --background: #ffffff;
+  border-top: 1px solid #eee;
 
+  display: flex;
+  align-items: center;
+}
+
+ion-tab-button {
+  --color: #999;
+  --color-selected: #e94b6a;
+
+  font-size: 11px;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.fab-tab {
+  flex: none;
+
+  width: 58px;
+  height: 58px;
+
+  margin-top: -22px;
+
+  background: #e94b6a;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+
+  ion-icon {
+    color: #fff;
+    font-size: 26px;
+  }
+}
