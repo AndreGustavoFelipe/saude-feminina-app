@@ -8,6 +8,13 @@ import { Component } from '@angular/core';
 })
 export class Tab3Page {
 
+  activeTab: string = 'menstruacao';
+
   constructor() {}
+
+  setTab(tab: string) {
+    this.activeTab = tab;
+  }
+
 
 }

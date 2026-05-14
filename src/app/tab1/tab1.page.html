@@ -8,11 +8,9 @@
 
   <div class="container">
 
-    <!-- HEADER -->
     <h2>Hoje</h2>
     <p class="date">20 de março, 2026</p>
 
-    <!-- CARD CICLO -->
     <ion-card class="cycle-card">
       <ion-card-content>
 
@@ -37,7 +35,6 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- CARDS INFO -->
     <div class="info-cards">
 
       <ion-card class="small-card">
@@ -62,10 +59,9 @@
 
     </div>
 
-    <!-- LISTA -->
     <h3 class="section-title">Registros recentes</h3>
 
-    <ion-list lines="none">
+    <ion-list class="custom-list">
 
       <ion-item class="custom-item">
         <div slot="start" class="icon orange">
@@ -89,14 +85,21 @@
 
     </ion-list>
 
-    <!-- DICA -->
     <ion-card class="tip-card">
       <ion-card-content>
-        <h3>Dica do dia</h3>
-        <p>
-          Durante a fase folicular, exercícios de maior intensidade podem trazer
-          mais benefícios. Aproveite a energia!
-        </p>
+
+        <div class="icon blue">
+          <ion-icon name="information-circle-outline"></ion-icon>
+        </div>
+
+        <div>
+          <h3>Dica do dia</h3>
+          <p>
+            Durante a fase folicular, exercícios de maior intensidade podem trazer
+            mais benefícios. Aproveite a energia!
+          </p>
+        </div>
+
       </ion-card-content>
     </ion-card>
 

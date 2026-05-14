@@ -1,16 +1,105 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Minha Saúde Feminina</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+
+  <div class="container">
+
+    <h2>Calendário Menstrual</h2>
+
+    <ion-card class="calendar-card">
+      <ion-card-content>
+
+        <div class="calendar-header">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+          <h3>Março 2026</h3>
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+
+        <div class="week-days">
+          <span>DOM</span>
+          <span>SEG</span>
+          <span>TER</span>
+          <span>QUA</span>
+          <span>QUI</span>
+          <span>SEX</span>
+          <span>SÁB</span>
+        </div>
+
+        <div class="calendar-grid">
+          <span>1</span>
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+          <span>5<div class="dot pink"></div></span>
+          <span>6<div class="dot pink"></div></span>
+          <span>7<div class="dot pink"></div></span>
+
+          <span>8<div class="dot pink"></div></span>
+          <span>9<div class="dot pink"></div></span>
+          <span>10</span>
+          <span>11</span>
+          <span>12</span>
+          <span>13</span>
+          <span>14</span>
+
+          <span>15<div class="dot orange"></div></span>
+          <span>16<div class="dot orange"></div></span>
+          <span>17<div class="dot orange"></div></span>
+          <span>18<div class="dot orange"></div></span>
+          <span>19<div class="dot orange"></div></span>
+          <span>20<div class="dot orange"></div></span>
+          <span>21<div class="dot orange"></div></span>
+
+          <span>22</span>
+          <span>23</span>
+          <span>24</span>
+          <span>25</span>
+          <span>26</span>
+          <span>27</span>
+          <span>28</span>
+
+          <span>29</span>
+          <span>30</span>
+          <span>31</span>
+        </div>
+
+        <div class="legend">
+          <span><div class="dot pink"></div>Menstruação</span>
+          <span><div class="dot orange"></div>Fértil</span>
+          <span><div class="dot green"></div>Ovulação</span>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <h3 class="section-title">Mais informações</h3>
+
+    <div class="info-cards">
+      <ion-card class="small-card">
+        <ion-card-content>
+          <div class="icon pink">
+            <ion-icon name="calendar-outline"></ion-icon>
+          </div>
+          <p>Próxima menstruação</p>
+          <h3>19 Mar</h3>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="small-card">
+        <ion-card-content>
+          <div class="icon pink">
+            <ion-icon name="heart-outline"></ion-icon>
+          </div>
+          <p>Registros de Sintomas</p>
+          <h3>3</h3>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
 
 </ion-content>
