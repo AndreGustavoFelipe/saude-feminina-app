@@ -1,0 +1,28 @@
+.loading-container,
+.error-container,
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.error-container ion-icon {
+    font-size: 48px;
+    color: #e94b6a;
+    margin-bottom: 12px;
+}
+
+.article-cover {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+}

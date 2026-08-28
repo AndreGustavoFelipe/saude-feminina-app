@@ -1,0 +1,119 @@
+/* Global styles for Saúde Feminina Admin Panel */
+@use '@angular/material' as mat;
+
+/* Custom theme based on the mobile app color palette */
+$saude-feminina-primary: mat.m2-define-palette((50: #fce7ef,
+      100: #f8c4d4,
+      200: #f49db8,
+      300: #f0769c,
+      400: #ec5a82,
+      500: #e94b6a,
+      600: #d64462,
+      700: #be3c57,
+      800: #a6344d,
+      900: #7e2539,
+      contrast: (50: rgba(0, 0, 0, 0.87),
+        100: rgba(0, 0, 0, 0.87),
+        200: rgba(0, 0, 0, 0.87),
+        300: rgba(0, 0, 0, 0.87),
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+      )));
+
+$saude-feminina-accent: mat.m2-define-palette((50: #f3eaff,
+      100: #e0ccff,
+      200: #ccabff,
+      300: #b78aff,
+      400: #a478f6,
+      500: #8b5cf6,
+      600: #7c52e0,
+      700: #6a45c5,
+      800: #5838ab,
+      900: #3e2580,
+      contrast: (50: rgba(0, 0, 0, 0.87),
+        100: rgba(0, 0, 0, 0.87),
+        200: rgba(0, 0, 0, 0.87),
+        300: white,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+      )));
+
+$saude-feminina-theme: mat.m2-define-light-theme((color: (primary: $saude-feminina-primary,
+        accent: $saude-feminina-accent,
+      ),
+      typography: mat.m2-define-typography-config($font-family: '"Inter", "Segoe UI", Roboto, sans-serif',
+      ),
+    ));
+
+@include mat.all-component-themes($saude-feminina-theme);
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  background: #f5f6f7;
+  color: #1c1c1e;
+}
+
+/* Sidebar active item */
+.mat-mdc-list-item.active {
+  background-color: rgba(233, 75, 106, 0.08) !important;
+  border-radius: 12px;
+}
+
+.mat-mdc-list-item.active .mat-icon {
+  color: #e94b6a;
+}
+
+.mat-mdc-list-item.active span[matListItemTitle] {
+  color: #e94b6a;
+  font-weight: 600;
+}
+
+/* Cards */
+.mat-mdc-card {
+  border-radius: 18px !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Buttons */
+.mat-mdc-raised-button.mat-primary {
+  border-radius: 12px !important;
+}
+
+.mat-mdc-button {
+  border-radius: 12px !important;
+}
+
+/* Form fields */
+.mat-mdc-form-field {
+  border-radius: 12px;
+}
+
+/* Snackbar */
+.mat-mdc-snack-bar-container {
+  border-radius: 12px !important;
+}
+
+/* Toolbar override */
+.mat-toolbar.mat-primary {
+  background: linear-gradient(135deg, #e94b6a, #8b5cf6) !important;
+  color: white !important;
+}
+
+/* Slide toggle active */
+.mat-mdc-slide-toggle .mdc-switch--selected .mdc-switch__track::after {
+  background: rgba(233, 75, 106, 0.4) !important;
+}

@@ -31,17 +31,17 @@
 
     <div class="fab-options" [class.open]="isOpen">
 
-      <button class="fab-option pink">
+      <button class="fab-option pink" (click)="onMenstruation()">
         <ion-icon name="water-outline"></ion-icon>
         Menstruação
       </button>
 
-      <button class="fab-option purple">
+      <button class="fab-option purple" (click)="onSymptom()">
         <ion-icon name="document-text-outline"></ion-icon>
         Sintoma
       </button>
 
-      <button class="fab-option blue">
+      <button class="fab-option blue" (click)="onEvent()">
         <ion-icon name="calendar-outline"></ion-icon>
         Evento
       </button>

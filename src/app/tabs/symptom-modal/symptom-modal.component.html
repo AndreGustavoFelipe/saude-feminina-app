@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Registrar Sintoma</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Fechar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="modal-content">
+    <h3>Selecione o sintoma</h3>
+
+    <div class="symptoms-grid" *ngIf="!isLoadingSymptoms">
+      <button *ngFor="let symptom of symptoms"
+        class="symptom-btn"
+        [class.selected]="selectedSymptomId === symptom.id"
+        (click)="selectSymptom(symptom.id)">
+        <ion-icon [name]="symptom.icon"></ion-icon>
+        <span>{{ symptom.name }}</span>
+      </button>
+    </div>
+
+    <div *ngIf="isLoadingSymptoms" class="loading">
+      <ion-spinner></ion-spinner>
+    </div>
+
+    <h3>Intensidade</h3>
+    <ion-segment [(ngModel)]="selectedIntensity" color="primary">
+      <ion-segment-button value="leve">
+        <ion-label>Leve</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="moderado">
+        <ion-label>Moderado</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="intenso">
+        <ion-label>Intenso</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <h3>Observações (opcional)</h3>
+    <ion-textarea [(ngModel)]="notes" placeholder="Adicione uma nota..." rows="3" fill="outline"></ion-textarea>
+
+    <ion-button expand="block" color="primary" (click)="submit()" [disabled]="!selectedSymptomId || isSubmitting">
+      <ion-spinner *ngIf="isSubmitting" name="crescent" slot="start"></ion-spinner>
+      {{ isSubmitting ? 'Registrando...' : 'Registrar Sintoma' }}
+    </ion-button>
+  </div>
+</ion-content>

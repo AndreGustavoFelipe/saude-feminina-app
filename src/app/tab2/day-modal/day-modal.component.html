@@ -1,0 +1,102 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ formattedDate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Fechar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="modal-content">
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button class="action-btn menstruation" [class.active]="isMenstruationDay" (click)="toggleMenstruation()"
+        [disabled]="isSubmitting">
+        <ion-icon name="water"></ion-icon>
+        <span>{{ isMenstruationDay ? 'Remover Menstruação' : 'Marcar Menstruação' }}</span>
+      </button>
+
+      <button class="action-btn reminder" (click)="showAddForm('reminder')">
+        <ion-icon name="alarm-outline"></ion-icon>
+        <span>Adicionar Lembrete</span>
+      </button>
+
+      <button class="action-btn note" (click)="showAddForm('note')">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <span>Adicionar Anotação</span>
+      </button>
+    </div>
+
+    <!-- Add Event Form -->
+    <div *ngIf="showForm" class="event-form">
+      <h4>{{ formType === 'reminder' ? 'Novo Lembrete' : 'Nova Anotação' }}</h4>
+
+      <ion-item>
+        <ion-input [(ngModel)]="formTitle" placeholder="Título *" [clearInput]="true"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="formType === 'reminder'">
+        <ion-input type="time" [(ngModel)]="formTime" placeholder="Horário (opcional)"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-textarea [(ngModel)]="formDescription" placeholder="Descrição (opcional)" rows="3"></ion-textarea>
+      </ion-item>
+
+      <div class="form-actions">
+        <ion-button fill="outline" size="small" (click)="cancelForm()">Cancelar</ion-button>
+        <ion-button size="small" color="primary" (click)="submitEvent()" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Salvando...' : 'Salvar' }}
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Events for this day -->
+    <div class="day-events" *ngIf="!isLoading && eventsForDay.length > 0">
+      <h4>Eventos deste dia</h4>
+      <div *ngFor="let event of eventsForDay" class="event-item" [class]="event.type">
+        <div class="event-info">
+          <ion-icon [name]="getEventIcon(event.type)"></ion-icon>
+          <div>
+            <span class="event-type-label">{{ getEventLabel(event.type) }}</span>
+            <p class="event-title" *ngIf="event.title && event.type !== 'menstruation'">{{ event.title }}</p>
+            <p class="event-time" *ngIf="event.time">{{ event.time }}</p>
+            <p class="event-desc" *ngIf="event.description">{{ event.description }}</p>
+          </div>
+        </div>
+        <button class="delete-btn" (click)="deleteEvent(event)" *ngIf="event.type !== 'menstruation'">
+          <ion-icon name="trash-outline"></ion-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Symptoms for this day -->
+    <div class="day-events" *ngIf="!isLoading && symptomLogsForDay.length > 0">
+      <h4>Sintomas registrados</h4>
+      <div *ngFor="let log of symptomLogsForDay" class="event-item symptom">
+        <div class="event-info">
+          <ion-icon [name]="log.symptom?.icon || 'fitness-outline'"></ion-icon>
+          <div>
+            <span class="event-type-label">{{ log.symptom?.name || 'Sintoma' }}</span>
+            <p class="event-title">{{ getIntensityLabel(log.intensity) }}</p>
+            <p class="event-desc" *ngIf="log.notes">{{ log.notes }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && eventsForDay.length === 0 && symptomLogsForDay.length === 0 && !showForm"
+      class="empty-state">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <p>Nenhum evento neste dia.</p>
+      <p class="hint">Use os botões acima para adicionar.</p>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+      <ion-spinner></ion-spinner>
+    </div>
+
+  </div>
+</ion-content>

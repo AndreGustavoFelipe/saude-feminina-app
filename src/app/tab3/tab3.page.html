@@ -5,137 +5,56 @@
 </ion-header>
 
 <ion-content>
-
   <div class="container">
-
     <div class="education-banner">
-      <h2>Educação Sexual</h2>
+      <h2>Conteúdos</h2>
       <p>Informação segura para sua saúde e bem-estar</p>
     </div>
 
+    <!-- Category Tabs -->
     <div class="tabs">
-      <button
-        class="tab"
-        [class.active]="activeTab === 'menstruacao'"
-        (click)="setTab('menstruacao')"
-      >
-        <ion-icon name="heart-outline"></ion-icon>
-        Menstruação
+      <button class="tab" [class.active]="!selectedCategoryId" (click)="selectCategory(undefined)">
+        Todos
       </button>
-
-      <button
-        class="tab"
-        [class.active]="activeTab === 'contracepcao'"
-        (click)="setTab('contracepcao')"
-      >
-        <ion-icon name="shield-outline"></ion-icon>
-        Contracepção
-      </button>
-
-      <button
-        class="tab"
-        [class.active]="activeTab === 'chat'"
-        (click)="setTab('chat')"
-      >
-        <ion-icon name="chatbubble-outline"></ion-icon>
-        Chat
+      <button class="tab" *ngFor="let cat of categories" [class.active]="selectedCategoryId === cat.id"
+        (click)="selectCategory(cat.id)">
+        {{ cat.name }}
       </button>
     </div>
 
-    <h3 class="section-title" *ngIf="activeTab !== 'chat'">
-      {{
-        activeTab === 'menstruacao'
-          ? 'Artigos sobre Menstruação'
-          : 'Artigos sobre Contracepção'
-      }}
-    </h3>
-
-    <div *ngIf="activeTab === 'menstruacao'">
-
-      <ion-card class="article-card">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-card class="article-card skeleton" *ngFor="let i of [1,2,3]">
         <ion-card-content>
-          <h3>Ciclo Menstrual: Entenda as Fases</h3>
-          <p>
-            O ciclo menstrual é dividido em quatro fases: menstrual, folicular,
-            ovulatória e lútea. Cada fase tem características e hormônios específicos...
-          </p>
-          <span class="read-more">Ler mais →</span>
+          <ion-skeleton-text [animated]="true"
+            style="width: 60%; height: 20px; margin-bottom: 8px;"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" style="width: 100%; height: 14px;"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" style="width: 80%; height: 14px;"></ion-skeleton-text>
         </ion-card-content>
       </ion-card>
-
-      <ion-card class="article-card">
-        <ion-card-content>
-          <h3>Sintomas Comuns e Alívio</h3>
-          <p>
-            Cólicas, alterações de humor e inchaço são sintomas comuns.
-            Exercícios, bolsa de água...
-          </p>
-          <span class="read-more">Ler mais →</span>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-card class="article-card">
-        <ion-card-content>
-          <h3>Produtos de Higiene Menstrual</h3>
-          <p>
-            Absorventes internos e externos, coletores menstruais, calcinhas
-            absorventes - conheça as opções e escolha a mais adequada...
-          </p>
-          <span class="read-more">Ler mais →</span>
-        </ion-card-content>
-      </ion-card>
-
     </div>
 
-    <div *ngIf="activeTab === 'contracepcao'">
-
-      <ion-card class="article-card">
-        <ion-card-content>
-          <h3>Métodos Contraceptivos</h3>
-          <p>
-            Conheça os diferentes métodos contraceptivos disponíveis e suas
-            eficácias para escolher o melhor para você...
-          </p>
-          <span class="read-more">Ler mais →</span>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-card class="article-card">
-        <ion-card-content>
-          <h3>Pílula Anticoncepcional</h3>
-          <p>
-            Tudo sobre como funciona, efeitos colaterais e orientações de uso
-            da pílula anticoncepcional...
-          </p>
-          <span class="read-more">Ler mais →</span>
-        </ion-card-content>
-      </ion-card>
-
+    <!-- Error State -->
+    <div *ngIf="hasError && !isLoading" class="error-container">
+      <ion-icon name="cloud-offline-outline" size="large"></ion-icon>
+      <p>Não foi possível carregar os conteúdos.</p>
+      <ion-button fill="outline" (click)="retry()">Tentar Novamente</ion-button>
     </div>
 
-    <div *ngIf="activeTab === 'chat'" class="chat-box">
+    <!-- Articles List -->
+    <div *ngIf="!isLoading && !hasError">
+      <ion-card class="article-card" *ngFor="let article of articles" (click)="openArticle(article)">
+        <img *ngIf="article.cover_image" [src]="article.cover_image" alt="" class="article-cover">
+        <ion-card-content>
+          <h3>{{ article.title }}</h3>
+          <p>{{ getExcerpt(article.body) }}</p>
+          <span class="read-more">Ler mais →</span>
+        </ion-card-content>
+      </ion-card>
 
-      <div class="chat-message">
-        <p>
-          Olá! Envie perguntas anônimas ou digite "É normal isso?"
-          para conversar sobre suas dúvidas.
-        </p>
-        <span class="time">18:19</span>
+      <div *ngIf="articles.length === 0" class="empty-state">
+        <p>Nenhum artigo disponível nesta categoria.</p>
       </div>
-
-      <div class="chat-input">
-        <input placeholder="Digite sua pergunta anônima..." />
-        <button>
-          <ion-icon name="arrow-forward-outline"></ion-icon>
-        </button>
-      </div>
-
-      <p class="chat-helper">
-        Digite "É normal isso?" para iniciar uma conversa automática
-      </p>
-
     </div>
-
   </div>
-
 </ion-content>

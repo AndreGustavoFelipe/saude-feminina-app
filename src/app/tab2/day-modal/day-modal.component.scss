@@ -1,0 +1,229 @@
+.modal-content {
+  padding: 16px;
+}
+
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #e0e0e0;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #1c1c1e;
+
+  ion-icon {
+    font-size: 22px;
+  }
+
+  &.menstruation {
+    ion-icon {
+      color: #e94b6a;
+    }
+
+    &.active {
+      background: #fce7ef;
+      border-color: #e94b6a;
+    }
+  }
+
+  &.reminder {
+    ion-icon {
+      color: #3b82f6;
+    }
+  }
+
+  &.note {
+    ion-icon {
+      color: #8b5cf6;
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+    background: #f9fafb;
+  }
+}
+
+.event-form {
+  background: #f9fafb;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 20px;
+
+  h4 {
+    margin: 0 0 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1c1c1e;
+  }
+
+  ion-item {
+    --background: #ffffff;
+    --border-radius: 10px;
+    --padding-start: 12px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+  }
+}
+
+.day-events {
+  margin-top: 16px;
+
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1c1c1e;
+    margin: 0 0 10px;
+  }
+}
+
+.event-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+
+  .event-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    ion-icon {
+      font-size: 20px;
+      margin-top: 2px;
+    }
+  }
+
+  &.menstruation {
+    background: #fef2f5;
+    border-color: #fce7ef;
+
+    .event-info ion-icon {
+      color: #e94b6a;
+    }
+  }
+
+  &.reminder {
+    background: #eff6ff;
+    border-color: #dbeafe;
+
+    .event-info ion-icon {
+      color: #3b82f6;
+    }
+  }
+
+  &.note {
+    background: #f5f3ff;
+    border-color: #ede9fe;
+
+    .event-info ion-icon {
+      color: #8b5cf6;
+    }
+  }
+
+  &.symptom {
+    background: #fef2f2;
+    border-color: #fecaca;
+
+    .event-info ion-icon {
+      color: #ef4444;
+    }
+  }
+
+  .event-type-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #6b7280;
+  }
+
+  .event-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1c1c1e;
+    margin: 2px 0 0;
+  }
+
+  .event-time {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 2px 0 0;
+  }
+
+  .event-desc {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 4px 0 0;
+  }
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+
+  ion-icon {
+    font-size: 18px;
+    color: #ef4444;
+  }
+
+  &:active {
+    background: #fef2f2;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 16px;
+  color: #8e8e93;
+
+  ion-icon {
+    font-size: 48px;
+    color: #d1d5db;
+    margin-bottom: 12px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .hint {
+    font-size: 12px;
+    margin-top: 4px;
+    color: #9ca3af;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+}

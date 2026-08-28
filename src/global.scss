@@ -449,6 +449,7 @@ p {
   color: #8e8e93;
   margin-top: 8px;
 }
+
 .profile-box {
   text-align: center;
   margin: 20px 0;
@@ -540,6 +541,7 @@ p {
   left: 50%;
   transform: translateX(-25%);
   z-index: 9999;
+  pointer-events: none;
 }
 
 .fab-main {
@@ -553,6 +555,7 @@ p {
   align-items: center;
   justify-content: center;
   font-size: 26px;
+  pointer-events: auto;
 }
 
 .fab-options {

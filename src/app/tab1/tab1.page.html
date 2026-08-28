@@ -5,45 +5,40 @@
 </ion-header>
 
 <ion-content class="home-content">
-
   <div class="container">
-
     <h2>Hoje</h2>
-    <p class="date">20 de março, 2026</p>
+    <p class="date">{{ today }}</p>
 
+    <!-- Cycle Card -->
     <ion-card class="cycle-card">
       <ion-card-content>
-
         <div class="cycle-header">
           <div>
             <p>Dia do ciclo</p>
-            <h1>14</h1>
+            <h1>{{ predictions?.current_day || '--' }}</h1>
           </div>
-
           <div class="circle-icon">
             <ion-icon name="water-outline"></ion-icon>
           </div>
         </div>
 
         <div class="cycle-phase">
-          <h3>Fase Folicular</h3>
-          <p>
-            Seu corpo está se preparando para a ovulação. Energia em alta!
-          </p>
+          <h3>{{ predictions?.current_phase || 'Sem dados' }}</h3>
+          <p>{{ phaseDescription }}</p>
         </div>
-
       </ion-card-content>
     </ion-card>
 
+    <!-- Prediction Cards -->
     <div class="info-cards">
-
       <ion-card class="small-card">
         <ion-card-content>
           <div class="icon orange">
             <ion-icon name="calendar-outline"></ion-icon>
           </div>
           <p>Próxima menstruação</p>
-          <h3>em 14 dias</h3>
+          <h3 *ngIf="daysUntilNext !== null">em {{ daysUntilNext }} dias</h3>
+          <h3 *ngIf="daysUntilNext === null">--</h3>
         </ion-card-content>
       </ion-card>
 
@@ -53,56 +48,61 @@
             <ion-icon name="trending-up-outline"></ion-icon>
           </div>
           <p>Janela fértil</p>
-          <h3>Inicia em 3 dias</h3>
+          <h3 *ngIf="daysUntilFertile !== null">em {{ daysUntilFertile }} dias</h3>
+          <h3 *ngIf="daysUntilFertile === null">--</h3>
         </ion-card-content>
       </ion-card>
-
     </div>
 
+    <!-- Upcoming Reminders -->
+    <div *ngIf="upcomingReminders.length > 0">
+      <h3 class="section-title">Próximos lembretes</h3>
+      <ion-list class="custom-list">
+        <ion-item class="custom-item" *ngFor="let reminder of upcomingReminders">
+          <div slot="start" class="icon blue">
+            <ion-icon name="alarm-outline"></ion-icon>
+          </div>
+          <ion-label>
+            <h2>{{ reminder.title }}</h2>
+            <p>{{ formatReminderDate(reminder.event_date) }}<span *ngIf="reminder.time"> &bull; {{ reminder.time
+                }}</span></p>
+            <p *ngIf="reminder.description" class="reminder-desc">{{ reminder.description }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <!-- Recent Symptoms -->
     <h3 class="section-title">Registros recentes</h3>
 
-    <ion-list class="custom-list">
-
-      <ion-item class="custom-item">
-        <div slot="start" class="icon orange">
-          <ion-icon name="sunny-outline"></ion-icon>
-        </div>
-        <ion-label>
-          <h2>Cólica leve</h2>
-          <p>Ontem, 14:30</p>
-        </ion-label>
-      </ion-item>
-
-      <ion-item class="custom-item">
+    <ion-list class="custom-list" *ngIf="recentSymptoms.length > 0">
+      <ion-item class="custom-item" *ngFor="let log of recentSymptoms">
         <div slot="start" class="icon purple">
-          <ion-icon name="moon-outline"></ion-icon>
+          <ion-icon [name]="getSymptomIcon(log)"></ion-icon>
         </div>
         <ion-label>
-          <h2>Sono irregular</h2>
-          <p>18 Mar, 22:00</p>
+          <h2>{{ log.symptom?.name }}</h2>
+          <p>{{ getIntensityLabel(log.intensity) }} &bull; {{ log.log_date }}</p>
         </ion-label>
       </ion-item>
-
     </ion-list>
 
-    <ion-card class="tip-card">
-      <ion-card-content>
+    <div *ngIf="recentSymptoms.length === 0 && !isLoading" class="empty-state">
+      <p>Nenhum sintoma registrado nos últimos 7 dias.</p>
+      <p class="hint">Use o botão + para registrar sintomas.</p>
+    </div>
 
+    <!-- Tip Card -->
+    <ion-card class="tip-card" *ngIf="predictions?.message">
+      <ion-card-content>
         <div class="icon blue">
           <ion-icon name="information-circle-outline"></ion-icon>
         </div>
-
         <div>
-          <h3>Dica do dia</h3>
-          <p>
-            Durante a fase folicular, exercícios de maior intensidade podem trazer
-            mais benefícios. Aproveite a energia!
-          </p>
+          <h3>Dica</h3>
+          <p>{{ predictions?.message }}</p>
         </div>
-
       </ion-card-content>
     </ion-card>
-
   </div>
-
 </ion-content>

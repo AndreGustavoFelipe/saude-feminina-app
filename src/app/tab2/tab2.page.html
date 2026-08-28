@@ -5,101 +5,75 @@
 </ion-header>
 
 <ion-content>
-
   <div class="container">
-
     <h2>Calendário Menstrual</h2>
 
     <ion-card class="calendar-card">
       <ion-card-content>
-
         <div class="calendar-header">
-          <ion-icon name="chevron-back-outline"></ion-icon>
-          <h3>Março 2026</h3>
-          <ion-icon name="chevron-forward-outline"></ion-icon>
+          <ion-icon name="chevron-back-outline" (click)="previousMonth()"></ion-icon>
+          <h3>{{ monthName }}</h3>
+          <ion-icon name="chevron-forward-outline" (click)="nextMonth()"></ion-icon>
         </div>
 
         <div class="week-days">
-          <span>DOM</span>
-          <span>SEG</span>
-          <span>TER</span>
-          <span>QUA</span>
-          <span>QUI</span>
-          <span>SEX</span>
-          <span>SÁB</span>
+          <span *ngFor="let day of weekDays">{{ day }}</span>
         </div>
 
         <div class="calendar-grid">
-          <span>1</span>
-          <span>2</span>
-          <span>3</span>
-          <span>4</span>
-          <span>5<div class="dot pink"></div></span>
-          <span>6<div class="dot pink"></div></span>
-          <span>7<div class="dot pink"></div></span>
-
-          <span>8<div class="dot pink"></div></span>
-          <span>9<div class="dot pink"></div></span>
-          <span>10</span>
-          <span>11</span>
-          <span>12</span>
-          <span>13</span>
-          <span>14</span>
-
-          <span>15<div class="dot orange"></div></span>
-          <span>16<div class="dot orange"></div></span>
-          <span>17<div class="dot orange"></div></span>
-          <span>18<div class="dot orange"></div></span>
-          <span>19<div class="dot orange"></div></span>
-          <span>20<div class="dot orange"></div></span>
-          <span>21<div class="dot orange"></div></span>
-
-          <span>22</span>
-          <span>23</span>
-          <span>24</span>
-          <span>25</span>
-          <span>26</span>
-          <span>27</span>
-          <span>28</span>
-
-          <span>29</span>
-          <span>30</span>
-          <span>31</span>
+          <div *ngFor="let dayObj of calendarDays" class="day-cell" [class.has-day]="dayObj.day"
+            [class.is-today]="dayObj.isToday" (click)="onDayTap(dayObj)">
+            <span class="day-number">{{ dayObj.day }}</span>
+            <div class="dots" *ngIf="dayObj.types.length > 0">
+              <div class="dot" *ngFor="let type of dayObj.types" [class.pink]="type === 'menstruation'"
+                [class.orange]="type === 'fertile'" [class.green]="type === 'ovulation'"
+                [class.blue]="type === 'reminder'" [class.purple]="type === 'note'" [class.red]="type === 'symptom'">
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="legend">
-          <span><div class="dot pink"></div>Menstruação</span>
-          <span><div class="dot orange"></div>Fértil</span>
-          <span><div class="dot green"></div>Ovulação</span>
+          <span>
+            <div class="dot pink"></div> Menstruação
+          </span>
+          <span>
+            <div class="dot orange"></div> Fértil
+          </span>
+          <span>
+            <div class="dot green"></div> Ovulação
+          </span>
+          <span>
+            <div class="dot blue"></div> Lembrete
+          </span>
+          <span>
+            <div class="dot purple"></div> Anotação
+          </span>
+          <span>
+            <div class="dot red"></div> Sintoma
+          </span>
         </div>
-
       </ion-card-content>
     </ion-card>
 
-    <h3 class="section-title">Mais informações</h3>
+    <p class="hint-text">Toque em um dia para adicionar eventos</p>
 
-    <div class="info-cards">
-      <ion-card class="small-card">
-        <ion-card-content>
-          <div class="icon pink">
-            <ion-icon name="calendar-outline"></ion-icon>
+    <!-- Upcoming Reminders -->
+    <div *ngIf="upcomingReminders.length > 0" class="reminders-section">
+      <h3 class="section-title">Próximos lembretes</h3>
+      <ion-list class="reminders-list">
+        <ion-item *ngFor="let reminder of upcomingReminders" class="reminder-item" lines="none">
+          <div slot="start" class="reminder-icon">
+            <ion-icon name="alarm-outline"></ion-icon>
           </div>
-          <p>Próxima menstruação</p>
-          <h3>19 Mar</h3>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-card class="small-card">
-        <ion-card-content>
-          <div class="icon pink">
-            <ion-icon name="heart-outline"></ion-icon>
-          </div>
-          <p>Registros de Sintomas</p>
-          <h3>3</h3>
-        </ion-card-content>
-      </ion-card>
+          <ion-label>
+            <h2>{{ reminder.title }}</h2>
+            <p>{{ formatReminderDate(reminder.event_date) }}<span *ngIf="reminder.time"> &bull; {{ reminder.time
+                }}</span></p>
+            <p *ngIf="reminder.description" class="reminder-desc">{{ reminder.description }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
     </div>
-
   </div>
-
 </ion-content>
