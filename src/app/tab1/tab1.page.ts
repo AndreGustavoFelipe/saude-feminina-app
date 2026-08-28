@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CycleService } from '../services/cycle.service';
 import { SymptomService } from '../services/symptom.service';
 import { CalendarEventService } from '../services/calendar-event.service';
+import { MenstruationLocalService } from '../services/menstruation-local.service';
 import { CyclePrediction } from '../models/prediction.model';
 import { SymptomLog } from '../models/symptom.model';
 import { CalendarEvent } from '../models/calendar-event.model';
@@ -12,7 +14,7 @@ import { CalendarEvent } from '../models/calendar-event.model';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
-export class Tab1Page implements OnInit {
+export class Tab1Page implements OnInit, OnDestroy {
   predictions: CyclePrediction | null = null;
   recentSymptoms: SymptomLog[] = [];
   upcomingReminders: CalendarEvent[] = [];
@@ -22,15 +24,28 @@ export class Tab1Page implements OnInit {
   daysUntilFertile: number | null = null;
   phaseDescription: string = '';
 
+  private menstruationSub?: Subscription;
+
   constructor(
     private cycleService: CycleService,
     private symptomService: SymptomService,
-    private calendarEventService: CalendarEventService
+    private calendarEventService: CalendarEventService,
+    private menstruationLocal: MenstruationLocalService
   ) { }
 
   ngOnInit(): void {
     this.today = this.formatToday();
     this.loadData();
+
+    // Recarrega automaticamente sempre que a menstruação for marcada/desmarcada
+    // em QUALQUER lugar do app (FAB da tabs.page, modal do dia, etc.)
+    this.menstruationSub = this.menstruationLocal.changes.subscribe(() => {
+      this.loadData();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.menstruationSub?.unsubscribe();
   }
 
   ionViewWillEnter(): void {

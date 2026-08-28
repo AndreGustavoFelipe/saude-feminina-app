@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { CycleService } from '../services/cycle.service';
 import { CalendarEventService } from '../services/calendar-event.service';
 import { SymptomService } from '../services/symptom.service';
+import { MenstruationLocalService } from '../services/menstruation-local.service';
 import { CalendarEvent } from '../models/calendar-event.model';
 import { SymptomLog } from '../models/symptom.model';
 import { CyclePrediction } from '../models/prediction.model';
@@ -21,7 +23,7 @@ interface CalendarDay {
   styleUrls: ['tab2.page.scss'],
   standalone: false,
 })
-export class Tab2Page implements OnInit {
+export class Tab2Page implements OnInit, OnDestroy {
   currentDate = new Date();
   currentYear: number;
   currentMonth: number;
@@ -34,10 +36,13 @@ export class Tab2Page implements OnInit {
   upcomingReminders: CalendarEvent[] = [];
   isLoading = true;
 
+  private menstruationSub?: Subscription;
+
   constructor(
     private cycleService: CycleService,
     private calendarEventService: CalendarEventService,
     private symptomService: SymptomService,
+    private menstruationLocal: MenstruationLocalService,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController
   ) {
@@ -47,6 +52,16 @@ export class Tab2Page implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+
+    // Recarrega automaticamente sempre que a menstruação for marcada/desmarcada
+    // em QUALQUER lugar do app (FAB da tabs.page, modal do dia, etc.)
+    this.menstruationSub = this.menstruationLocal.changes.subscribe(() => {
+      this.loadData();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.menstruationSub?.unsubscribe();
   }
 
   ionViewWillEnter(): void {
@@ -60,11 +75,9 @@ export class Tab2Page implements OnInit {
     const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
     const endDate = this.formatDate(this.currentYear, this.currentMonth + 1, daysInMonth);
 
-    // Load calendar events for this month
     this.calendarEventService.getEvents(startDate, endDate).subscribe({
       next: (events) => {
         this.events = events;
-        // Load predictions
         this.cycleService.getPredictions().subscribe({
           next: (predictions) => {
             this.predictions = predictions;
@@ -86,13 +99,11 @@ export class Tab2Page implements OnInit {
       }
     });
 
-    // Load upcoming reminders
     this.calendarEventService.getUpcomingReminders().subscribe({
       next: (reminders) => this.upcomingReminders = reminders,
       error: () => this.upcomingReminders = []
     });
 
-    // Load symptom logs for this month
     this.symptomService.getSymptomLogs(startDate, endDate).subscribe({
       next: (logs) => {
         this.symptomLogs = logs;
@@ -132,7 +143,6 @@ export class Tab2Page implements OnInit {
 
     this.calendarDays = [];
 
-    // Padding for first week
     for (let i = 0; i < firstDay; i++) {
       this.calendarDays.push({ day: null, date: '', types: [], isToday: false });
     }
@@ -152,7 +162,6 @@ export class Tab2Page implements OnInit {
   getDayTypes(dateStr: string): string[] {
     const types: string[] = [];
 
-    // Check calendar events
     const dayEvents = this.events.filter(e => e.event_date === dateStr);
     if (dayEvents.some(e => e.type === 'menstruation')) {
       types.push('menstruation');
@@ -164,12 +173,10 @@ export class Tab2Page implements OnInit {
       types.push('note');
     }
 
-    // Check symptom logs
     if (this.symptomLogs.some(s => s.log_date === dateStr)) {
       types.push('symptom');
     }
 
-    // Check predictions
     if (this.predictions && !types.includes('menstruation')) {
       if (this.predictions.fertile_window_start && this.predictions.fertile_window_end) {
         if (dateStr >= this.predictions.fertile_window_start && dateStr <= this.predictions.fertile_window_end) {
@@ -177,9 +184,9 @@ export class Tab2Page implements OnInit {
         }
       }
       if (this.predictions.fertile_window_end) {
-        const ovulationDate = new Date(this.predictions.fertile_window_end);
-        ovulationDate.setDate(ovulationDate.getDate() + 1);
-        const ovStr = ovulationDate.toISOString().split('T')[0];
+        // Aritmética 100% em UTC, sem depender de new Date(string).setDate(),
+        // que é sensível a fuso horário.
+        const ovStr = this.menstruationLocal.addDaysToDateString(this.predictions.fertile_window_end, 1);
         if (dateStr === ovStr) {
           types.push('ovulation');
         }

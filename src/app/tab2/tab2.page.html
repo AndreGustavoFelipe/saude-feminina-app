@@ -22,20 +22,23 @@
 
         <div class="calendar-grid">
           <div *ngFor="let dayObj of calendarDays" class="day-cell" [class.has-day]="dayObj.day"
-            [class.is-today]="dayObj.isToday" (click)="onDayTap(dayObj)">
+               [class.is-today]="dayObj.isToday" (click)="onDayTap(dayObj)">
             <span class="day-number">{{ dayObj.day }}</span>
             <div class="dots" *ngIf="dayObj.types.length > 0">
-              <div class="dot" *ngFor="let type of dayObj.types" [class.pink]="type === 'menstruation'"
-                [class.orange]="type === 'fertile'" [class.green]="type === 'ovulation'"
-                [class.blue]="type === 'reminder'" [class.purple]="type === 'note'" [class.red]="type === 'symptom'">
-              </div>
+              <ng-container *ngFor="let type of dayObj.types">
+                <ion-icon *ngIf="type === 'menstruation'" name="heart" class="dot-heart"></ion-icon>
+                <div *ngIf="type !== 'menstruation'" class="dot" [class.orange]="type === 'fertile'"
+                     [class.green]="type === 'ovulation'" [class.blue]="type === 'reminder'"
+                     [class.purple]="type === 'note'" [class.red]="type === 'symptom'">
+                </div>
+              </ng-container>
             </div>
           </div>
         </div>
 
         <div class="legend">
           <span>
-            <div class="dot pink"></div> Menstruação
+            <ion-icon name="heart" class="legend-heart"></ion-icon> Menstruação
           </span>
           <span>
             <div class="dot orange"></div> Fértil
@@ -69,7 +72,7 @@
           <ion-label>
             <h2>{{ reminder.title }}</h2>
             <p>{{ formatReminderDate(reminder.event_date) }}<span *ngIf="reminder.time"> &bull; {{ reminder.time
-                }}</span></p>
+              }}</span></p>
             <p *ngIf="reminder.description" class="reminder-desc">{{ reminder.description }}</p>
           </ion-label>
         </ion-item>

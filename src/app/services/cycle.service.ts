@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MenstrualCycle } from '../models/cycle.model';
 import { CyclePrediction } from '../models/prediction.model';
+import { MenstruationLocalService } from './menstruation-local.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,10 @@ import { CyclePrediction } from '../models/prediction.model';
 export class CycleService {
   private baseUrl = 'http://localhost:8000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private menstruationLocal: MenstruationLocalService
+  ) {}
 
   getCycles(): Observable<MenstrualCycle[]> {
     return this.http.get<{ data: MenstrualCycle[] }>(`${this.baseUrl}/cycles`)
@@ -33,6 +37,6 @@ export class CycleService {
   }
 
   getPredictions(): Observable<CyclePrediction> {
-    return this.http.get<CyclePrediction>(`${this.baseUrl}/predictions`);
+    return of(this.menstruationLocal.getPredictions());
   }
 }

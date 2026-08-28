@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { CalendarEvent, CreateCalendarEventDto, UpdateCalendarEventDto } from '../models/calendar-event.model';
+import { MenstruationLocalService } from './menstruation-local.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,10 @@ import { CalendarEvent, CreateCalendarEventDto, UpdateCalendarEventDto } from '.
 export class CalendarEventService {
   private baseUrl = 'http://localhost:8000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private menstruationLocal: MenstruationLocalService
+  ) {}
 
   getEvents(startDate?: string, endDate?: string, type?: string): Observable<CalendarEvent[]> {
     let params = new HttpParams();
@@ -19,13 +23,32 @@ export class CalendarEventService {
     if (type) params = params.set('type', type);
 
     return this.http.get<{ data: CalendarEvent[] }>(`${this.baseUrl}/calendar-events`, { params })
-      .pipe(map(res => res.data));
+      .pipe(
+        catchError(() => of({ data: [] as CalendarEvent[] })),
+        map(res => (res.data || []).filter(e => e.type !== 'menstruation')),
+        map(apiEvents => {
+          if (type && type !== 'menstruation') {
+            return apiEvents;
+          }
+          const localEvents = this.menstruationLocal.getMenstruationEventsInRange(startDate, endDate);
+          return type === 'menstruation' ? localEvents : [...apiEvents, ...localEvents];
+        })
+      );
   }
 
   getEventsForDate(date: string): Observable<CalendarEvent[]> {
     const params = new HttpParams().set('event_date', date);
     return this.http.get<{ data: CalendarEvent[] }>(`${this.baseUrl}/calendar-events`, { params })
-      .pipe(map(res => res.data));
+      .pipe(
+        catchError(() => of({ data: [] as CalendarEvent[] })),
+        map(res => (res.data || []).filter(e => e.type !== 'menstruation')),
+        map(apiEvents => {
+          const localEvent = this.menstruationLocal.isMenstruationDay(date)
+            ? [this.menstruationLocal.buildSyntheticEvent(date)]
+            : [];
+          return [...localEvent, ...apiEvents];
+        })
+      );
   }
 
   createEvent(dto: CreateCalendarEventDto): Observable<CalendarEvent> {
@@ -42,8 +65,8 @@ export class CalendarEventService {
     return this.http.delete<void>(`${this.baseUrl}/calendar-events/${id}`);
   }
 
-  toggleMenstruation(date: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/calendar-events/toggle-menstruation`, { event_date: date });
+  toggleMenstruation(date: string): Observable<{ action: 'created' | 'removed'; date: string }> {
+    return of(this.menstruationLocal.toggleMenstruation(date));
   }
 
   getUpcomingReminders(): Observable<CalendarEvent[]> {
